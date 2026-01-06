@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🔏🩵AUTOMATION 🔒</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --primary: #00f2fe; --secondary: #4facfe; --card: rgba(0, 0, 0, 0.6); }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-image: url('https://i.postimg.cc/mZvCZF6J/pinterest-1766629694879.jpg');
+            background-size: cover; background-position: center; background-attachment: fixed;
+            color: #fff; margin: 0; padding: 20px; display: flex; justify-content: center; min-height: 100vh;
+        }
+        #go-msg-box {
+            display: none; position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            z-index: 10000; padding: 20px; border-radius: 12px; width: 85%; max-width: 450px;
+            text-align: center; font-weight: 800; font-size: 1rem; border: 1px solid rgba(255, 255, 255, 0.3);
+            background: var(--card); backdrop-filter: blur(15px); color: #fff;
+        }
+        .container {
+            width: 100%; max-width: 450px; background: var(--card); backdrop-filter: blur(15px);
+            padding: 25px; border-radius: 20px; box-shadow: 0 0 20px rgba(0, 242, 254, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3); text-align: center;
+        }
+        h1 {
+            background: linear-gradient(45deg, #00f2fe, #fff, #4facfe);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            font-weight: 800; text-transform: uppercase; font-size: 1.5rem;
+        }
+        .recovery-box {
+            background: rgba(0, 242, 254, 0.1); border: 1px solid var(--primary);
+            padding: 8px; border-radius: 20px; font-size: 0.7rem; font-weight: 800;
+            display: inline-block; margin-bottom: 15px; color: var(--primary);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0% { opacity: 0.7; } 50% { opacity: 1; } 100% { opacity: 0.7; } }
+        .box {
+            background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255,255,255,0.2);
+            padding: 15px; border-radius: 15px; margin-bottom: 15px; text-align: left;
+        }
+        label { font-size: 0.85rem; font-weight: 600; color: var(--primary); display: block; margin-bottom: 5px; }
+        @keyframes color-fade {
+            0% { color: #ff0000; text-shadow: 0 0 5px #ff0000; }
+            20% { color: #ff8c00; text-shadow: 0 0 5px #ff8c00; }
+            40% { color: #ffff00; text-shadow: 0 0 5px #ffff00; }
+            60% { color: #00ff00; text-shadow: 0 0 5px #00ff00; }
+            80% { color: #00f2fe; text-shadow: 0 0 5px #00f2fe; }
+            100% { color: #ff0000; text-shadow: 0 0 5px #ff0000; }
+        }
+        .label-hater { animation: color-fade 3s linear infinite; font-weight: 800; }
+        .label-thread { color: #00f2fe; text-shadow: 0 0 5px #00f2fe; }
+        .label-last { color: #ff8c00; text-shadow: 0 0 5px #ff8c00; }
+        .label-delay { color: #00ff00; text-shadow: 0 0 5px #00ff00; }
+        textarea, input, select {
+            width: 100%; background: rgba(0, 0, 0, 0.5); border: 1px solid #fff;
+            color: #fff; padding: 10px; border-radius: 10px; margin-bottom: 5px; box-sizing: border-box;
+        }
+        button {
+            width: 100%; padding: 12px; border-radius: 10px; font-weight: 700; cursor: pointer;
+            text-transform: uppercase; margin-top: 10px; border: 2px solid; transition: 0.3s;
+        }
+        .btn-start { background: transparent; color: #28a745; border-color: #28a745; }
+        .btn-stop { background: transparent; color: #ff0000; border-color: #ff0000; }
+        .btn-check { background: transparent; color: #00f2fe; border-color: #00f2fe; margin-bottom:10px; }
+
+        .checker-result { 
+            font-size: 0.75rem; padding: 0; margin-top: 10px; display: none;
+        }
+
+        /* 🔥 NEW STYLE FOR RANDOM COLOR BOXES (LINE TO LINE) */
+        .result-box {
+            padding: 10px; margin-bottom: 5px; border-radius: 8px; color: #000; font-weight: bold;
+            display: flex; align-items: center; border: 1px solid #fff; animation: popIn 0.3s ease;
+        }
+        @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+        .profile-img { width: 40px; height: 40px; border-radius: 50%; border: 2px solid #fff; vertical-align: middle; margin-right: 10px; }
+
+        #stop-key-box {
+            display: none; background: rgba(0, 255, 0, 0.1); border: 2px solid #00ff00;
+            padding: 10px; border-radius: 10px; margin-bottom: 15px; font-weight: bold;
+            color: #fff;
+        }
+        #started-msg-box {
+            display: none; background: rgba(0, 242, 254, 0.2); border: 1px solid var(--primary);
+            padding: 10px; border-radius: 10px; margin-bottom: 15px; font-size: 0.9rem;
+            color: #fff; animation: fadeOut 180s forwards;
+        }
+        @keyframes fadeOut { 0% { opacity: 1; } 90% { opacity: 1; } 100% { opacity: 0; display: none; } }
+        #logs {
+            height: 200px; overflow-y: auto; background: rgba(0, 0, 0, 0.5); padding: 10px;
+            border-radius: 10px; font-family: monospace; font-size: 0.75rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .social-box {
+            display: flex; justify-content: center; gap: 15px; margin-top: 20px;
+            padding: 10px; border: 1px solid rgba(255, 255, 255, 0.3); border-radius: 25px;
+        }
+        .social-box a { font-size: 1.4rem; }
+        .fa-whatsapp { color: #25d366; } .fa-facebook { color: #1877f2; } .fa-instagram { color: #e4405f; } .fa-telegram { color: #0088cc; }
+        @keyframes color-fade-alt {
+            0% { color: #ff0000; text-shadow: 0 0 5px #ff0000; }
+            10% { color: #ff8c00; text-shadow: 0 0 5px #ff8c00; }
+            20% { color: #ffff00; text-shadow: 0 0 5px #ffff00; }
+            30% { color: #00ff00; text-shadow: 0 0 5px #00ff00; }
+            40% { color: #00ffff; text-shadow: 0 0 5px #00ffff; }
+            50% { color: #0000ff; text-shadow: 0 0 5px #0000ff; }
+            60% { color: #8b00ff; text-shadow: 0 0 5px #8b00ff; }
+            70% { color: #ff00ff; text-shadow: 0 0 5px #ff00ff; }
+            80% { color: #ff1493; text-shadow: 0 0 5px #ff1493; }
+            90% { color: #00fa9a; text-shadow: 0 0 5px #00fa9a; }
+            100% { color: #ff0000; text-shadow: 0 0 5px #ff0000; }
+        }
+        @keyframes color-fade-unique {
+            0% { color: #E6E6FA; text-shadow: 0 0 5px #E6E6FA; }
+            25% { color: #FFF0F5; text-shadow: 0 0 5px #FFF0F5; }
+            50% { color: #F0FFFF; text-shadow: 0 0 5px #F0FFFF; }
+            75% { color: #F5F5DC; text-shadow: 0 0 5px #F5F5DC; }
+            100% { color: #E6E6FA; text-shadow: 0 0 5px #E6E6FA; }
+        }
+        .unique-anim { animation: color-fade-unique 4s linear infinite; font-weight: 800; }
+        .label-uid { color: #ADFF2F; text-shadow: 0 0 5px #ADFF2F; font-weight: 800; }
+        .label-msg { color: #800080; text-shadow: 0 0 5px #800080; font-weight: 800; }
+        .footer-anim {
+            margin-top: 20px; padding: 12px; border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px; font-size: 0.6rem; background: var(--card);
+            color: white; line-height: 1.5;
+            animation: pulse-border 3s ease-in-out infinite, color-fade-alt 5s linear infinite;
+        }
+        @keyframes pulse-border {
+            0% { border-color: rgba(255, 255, 255, 0.3); }
+            50% { border-color: rgba(255, 255, 255, 0.8); }
+            100% { border-color: rgba(255, 255, 255, 0.3); }
+        }
+        .raj-name { color: #00f2fe; font-weight: 800; }
+        .tab-btn { background: rgba(255,255,255,0.1); border: 1px solid #fff; color: #fff; width: 32%; font-size: 0.7rem; }
+        .active-tab { background: var(--primary); color: #000; }
+    </style>
+</head>
+<body>
+    <div id="go-msg-box">Go 🔥and see, I have started ✅sending your message. Please😏 check your 📥group/inbox!</div>
+
+    <div class="container">
+        <div class="box" style="animation: pulse-border 3s ease-in-out infinite;">
+            <h1 style="margin: 0; font-size: 1.1rem; font-weight: 800; text-transform: uppercase; display: flex; align-items: center; justify-content: center; gap: 5px; white-space: nowrap; flex-wrap: nowrap; width: 100%; overflow: hidden;">
+                <span style="background: linear-gradient(45deg, #00f2fe, #fff, #4facfe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; white-space: nowrap;">🔏 KARTIK MULTI COOKIES</span>
+                <span style="flex-shrink: 0;">🍪</span>
+                <span style="background: linear-gradient(45deg, #00f2fe, #fff, #4facfe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; white-space: nowrap;">CONVO 🔒</span>
+            </h1>
+        </div>
+        <div class="box" style="margin-top: -10px; animation: pulse-border 3s ease-in-out infinite; padding: 10px;">
+            <p style="margin: 0; font-weight: 800; font-size: 0.9rem; animation: color-fade-alt 5s linear infinite;">
+                Facebook cookies 🍪 Offline server | Raj
+            </p>
+        </div>
+        <div class="recovery-box">🛡️ ADVANCED CLUSTER SYSTEM | 24/7 AUTO-HEAL ✅</div>
+
+        <div id="stop-key-box">
+            STOP KEY: <span id="key-text" style="color: #00f2fe;"></span>
+        </div>
+        <div id="started-msg-box">STARTED BY KARTIK RAJPUT SYSTEM - 24/7 ACTIVE</div>
+
+        <div class="box" style="animation: pulse-border 3s ease-in-out infinite;">
+            <div style="display: flex; gap: 5px;">
+                <button class="tab-btn active-tab" onclick="showTab('send')">SEND</button>
+                <button class="tab-btn" onclick="showTab('stop')">STOP</button>
+                <button class="tab-btn" onclick="showTab('view')">VIEW</button>
+            </div>
+        </div>
+
+        <div id="send-tab">
+            <div class="box" style="animation: pulse-border 3s ease-in-out infinite;">
+                <label>🍪 Cookie 🍪 Checker 🔎 (Universal - JSON/Raw)</label>
+                <select id="check-method" onchange="toggleCheckMethod()">
+                    <option value="paste">Paste Cookies</option>
+                    <option value="file">Upload Cookie File</option>
+                </select>
+                <div id="check-paste-div">
+                    <textarea id="check-cookie-input" rows="2" placeholder="Paste datr=..., Netscape, or JSON..."></textarea>
+                </div>
+                <div id="check-file-div" style="display:none; margin-top:5px;">
+                    <input type="file" id="check-cookie-file">
+                </div>
+                <button class="btn-check" onclick="checkCookie()">✔ Cookie 🍪 check🔎</button>
+                <div id="checker-res" class="checker-result"></div>
+            </div>
+
+            <div class="box">
+                <label class="label-uid">🆔 Group UID Fetcher</label>
+                <button class="btn-check" style="color:#ff8c00; border-color:#ff8c00;" onclick="fetchGroups()">📡 Fetch All Group UIDs</button>
+                <div id="group-res" class="checker-result" style="max-height: 250px; overflow-y: auto;"></div>
+            </div>
+
+            <div class="box">
+                <label>🍪 Cookies Option (Universal Support)</label>
+                <select id="cookie-method" onchange="toggleBox('cookie')">
+                    <option value="paste">Paste Cookies</option>
+                    <option value="file">Upload Cookie File</option>
+                </select>
+                <div id="cookie-paste-div"><textarea id="cookie-input" rows="2" placeholder="Paste here..."></textarea></div>
+                <div id="cookie-file-div" style="display:none; margin-top:5px;"><input type="file" id="cookie-file"></div>
+            </div>
+            <div class="box">
+                <label class="label-hater">👤 Hater's Name</label>
+                <input type="text" id="haters-name">
+                <label class="label-thread">🆔 Thread/Group ID</label>
+                <input type="text" id="thread-id">
+                <label class="label-last">🔚 Last Here Name</label>
+                <input type="text" id="last-here-name">
+                <label class="label-delay">⏱️ Delay (seconds)</label>
+                <input type="number" id="delay" value="5">
+            </div>
+
+            <div class="box" style="background: rgba(255, 105, 180, 0.1); border-color: #ff69b4; animation: pulse-border 3s ease-in-out infinite;">
+                <h3 style="background: linear-gradient(45deg, #00f2fe, #fff, #4facfe); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-align: center; margin-top: 0; font-weight: 800; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">🔒 GROUP PROTECTION SYSTEM 🔒</h3>
+
+                <div style="border: 1px solid #ff00ff; padding: 10px; border-radius: 12px; margin-bottom: 10px;">
+                    <label style="display: flex; align-items: center; color: #ff00ff; font-size: 1.1rem;">
+                        <input type="checkbox" id="lockGroupName" style="width: 20px; height: 20px; margin-right: 10px;"> Lock Group Name
+                    </label>
+                    <input type="text" id="targetNickname" placeholder="Enter Target Group Name" style="margin-top: 5px; border-color: #ff00ff;">
+                </div>
+
+                <div style="border: 2px solid #00FF00; padding: 10px; border-radius: 12px; margin-bottom: 10px; box-shadow: 0 0 10px #00FF00;">
+                    <label style="display: flex; align-items: center; color: #00FF00; font-size: 1.1rem; font-weight: 800; text-shadow: 0 0 5px #00FF00;">
+                        <input type="checkbox" id="lockNickname" style="width: 20px; height: 20px; margin-right: 10px;"> Lock All Nicknames
+                    </label>
+                    <input type="text" id="targetNicknameAll" placeholder="Enter Target Nickname" style="margin-top: 5px; border-color: #00FF00; background: rgba(0, 255, 0, 0.1);">
+                </div>
+
+                <div style="border: 1px solid #ff8c00; padding: 10px; border-radius: 12px; margin-bottom: 10px;">
+                    <label style="display: flex; align-items: center; color: #ff8c00; font-size: 1.1rem;">
+                        <input type="checkbox" id="lockDP" style="width: 20px; height: 20px; margin-right: 10px;"> Lock Group DP (URL)
+                    </label>
+                    <input type="text" id="targetDP" placeholder="Enter Image URL for DP" style="margin-top: 5px; border-color: #ff8c00;">
+                </div>
+
+                <div style="border: 1px solid #00f2fe; padding: 10px; border-radius: 12px;">
+                    <label style="display: flex; align-items: center; color: #00f2fe; font-size: 1.1rem; font-weight: 800;">
+                        <input type="checkbox" id="messageHackActive" style="width: 20px; height: 20px; margin-right: 10px;"> HACK ALL MESSAGES
+                    </label>
+                    <p style="font-size: 0.8rem; color: #b3f0ff; margin: 5px 0 0 0;">Only Cookies & Admin can message. Others will be deleted.</p>
+                </div>
+            </div>
+            <div class="box">
+                <label class="label-msg">📄 Message Option</label>
+                <select id="msg-method" onchange="toggleBox('msg')">
+                    <option value="paste">Paste Messages</option>
+                    <option value="file">Upload Message File</option>
+                </select>
+                <div id="msg-paste-div"><textarea id="msg-input" rows="2" placeholder="One per line..."></textarea></div>
+                <div id="msg-file-div" style="display:none; margin-top:5px;"><input type="file" id="message-file"></div>
+            </div>
+            <button class="btn-start" onclick="startTask()">🚀 Start Automation</button>
+        </div>
+
+        <div id="stop-tab" style="display:none;">
+            <div class="box">
+                <label>🔑 Enter Task ID</label>
+                <input type="text" id="stop-id">
+            </div>
+            <button class="btn-stop" onclick="stopTask()">🛑 Stop Task</button>
+        </div>
+
+        <div id="view-tab" style="display:none;">
+            <div class="box">
+                <label>🔍 Enter Task ID</label>
+                <input type="text" id="view-id">
+            </div>
+            <button onclick="viewTask()" style="border-color:var(--primary); color:var(--primary); background:transparent;">📊 View Status</button>
+            <div id="task-stats" style="display:none; font-size:0.8rem; text-align:left; margin-top:10px;">
+                <p>Sent: <span id="s-sent"></span> | Failed: <span id="s-failed"></span></p>
+                <div id="detail-log" style="height:100px; overflow-y:auto; background:#000; border:1px solid #fff; font-size:0.7rem;"></div>
+            </div>
+        </div>
+
+        <div class="box" style="margin-top:20px;">
+            <label>📡 Live Console Logs</label>
+            <div id="logs"></div>
+        </div>
+
+        <div class="social-box">
+            <a href="https://www.facebook.com/KartikRajput3678" target="_blank"><i class="fab fa-facebook"></i></a>
+            <a href="https://www.facebook.com/profile.php?id=61584657088076" target="_blank"><i class="fab fa-facebook-f"></i></a>
+            <a href="https://www.instagram.com/cyber_learning_raj?igsh=cmMyYjNxcWR2M2pk" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://chat.whatsapp.com/IE5X7am2TeY7bE6hQbS4xB" target="_blank"><i class="fab fa-whatsapp"></i></a>
+            <a href="https://t.me/Kartik_RajputOfficial420" target="_blank"><i class="fab fa-telegram"></i></a>
+        </div>
+
+        <div class="footer-anim">
+            🔒 TERMS OF SERVICE | 🔗 FACEBOOK SECURE | 🔐 ©2025-2026 RIGHT RESERVED 💙 CREATED BY | 🩶[<span class="raj-name">KARTIK 🩵 RAJPUT</span>] ON 🔥 FIRE |
+        </div>
+    </div>
+
+    <script>
+        const socket = new WebSocket((location.protocol==='https:'?'wss:':'ws:') + '//' + location.host);
+
+        // 🔥 Random Pastel Color Generator (For the Box UI)
+        function getRandomColor() {
+            const colors = [
+                'rgba(255, 99, 132, 0.8)',   // Rose
+                'rgba(54, 162, 235, 0.8)',   // Blue
+                'rgba(255, 206, 86, 0.8)',   // Yellow
+                'rgba(75, 192, 192, 0.8)',   // Teal
+                'rgba(153, 102, 255, 0.8)',  // Purple
+                'rgba(255, 159, 64, 0.8)',   // Orange
+                'rgba(255, 0, 255, 0.8)',    // Magenta
+                'rgba(0, 255, 255, 0.8)',    // Cyan
+                'rgba(127, 255, 0, 0.8)',    // Chartreuse
+                'rgba(255, 20, 147, 0.8)',   // Deep Pink
+                'rgba(0, 250, 154, 0.8)',    // Medium Spring Green
+                'rgba(255, 255, 255, 0.9)'   // Crystal White
+            ];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        function toggleCheckMethod() {
+            const method = document.getElementById('check-method').value;
+            document.getElementById('check-paste-div').style.display = method === 'paste' ? 'block' : 'none';
+            document.getElementById('check-file-div').style.display = method === 'file' ? 'block' : 'none';
+        }
+
+        async function checkCookie() {
+            let ck = '';
+            if(document.getElementById('check-method').value === 'file') {
+                const f = document.getElementById('check-cookie-file').files[0];
+                if(f) ck = await f.text();
+            } else { ck = document.getElementById('check-cookie-input').value; }
+
+            if(!ck) return alert("Please provide cookie!");
+            socket.send(JSON.stringify({ type: 'check_cookie', cookie: ck }));
+            document.getElementById('checker-res').style.display = 'block';
+            document.getElementById('checker-res').innerHTML = "Checking... ⏳";
+        }
+
+        async function fetchGroups() {
+            let ck = '';
+            if(document.getElementById('check-method').value === 'file') {
+                const f = document.getElementById('check-cookie-file').files[0];
+                if(f) ck = await f.text();
+            } else { ck = document.getElementById('check-cookie-input').value || document.getElementById('cookie-input').value; }
+
+            if(!ck) return alert("Please provide cookie first!");
+            socket.send(JSON.stringify({ type: 'fetch_groups', cookie: ck }));
+            document.getElementById('group-res').style.display = 'block';
+            document.getElementById('group-res').innerHTML = "Fetching Groups... ⏳";
+        }
+
+        function showTab(tab) {
+            ['send','stop','view'].forEach(t => document.getElementById(t+'-tab').style.display = t===tab?'block':'none');
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active-tab', b.innerText.toLowerCase()===tab));
+        }
+
+        function toggleBox(type) {
+            const method = document.getElementById(type + '-method').value;
+            document.getElementById(type + '-paste-div').style.display = method === 'paste' ? 'block' : 'none';
+            document.getElementById(type + '-file-div').style.display = method === 'file' ? 'block' : 'none';
+        }
+
+        socket.onmessage = (ev) => {
+            const data = JSON.parse(ev.data);
+
+            if(data.type === 'cookie_result') {
+                const resBox = document.getElementById('checker-res');
+                if(data.index === 0) resBox.innerHTML = '';
+                resBox.style.display = 'block';
+                if(data.status === 'success') {
+                    const bgColor = getRandomColor();
+                    resBox.innerHTML += '<div class="result-box" style="background: ' + bgColor + '; border-radius:10px; padding:10px; margin-bottom:5px;">' +
+                        '<img src="' + data.user.thumbSrc + '" class="profile-img">' +
+                        '<div style="text-align:left;">' +
+                            '<b>' + data.user.name + '</b><br>ID: ' + data.user.id + ' <br><span style="color:white; background:rgba(0,0,0,0.5); padding:0 3px;">Active ✅</span>' +
+                        '</div>' +
+                    '</div>';
+                } else {
+                    resBox.innerHTML += '<div class="result-box" style="background:#ff4444; color:#fff; border-radius:10px; padding:10px; margin-bottom:5px;">Cookie #' + (data.index + 1) + ' Expired/Invalid! ❌</div>';
+                }
+            }
+
+            if(data.type === 'groups_result') {
+                const resBox = document.getElementById('group-res');
+                if(data.cookieIndex === 0) resBox.innerHTML = '';
+                resBox.style.display = 'block';
+                if(data.status === 'success') {
+                    let html = '<b>Groups (Cookie #' + (data.cookieIndex + 1) + '):</b><br>';
+                    data.groups.forEach(g => {
+                        const bgColor = getRandomColor();
+                        html += '<div class="result-box" style="background: ' + bgColor + '; justify-content: space-between; margin-bottom:5px; border-radius:8px; padding:8px; color:#000;">' +
+                            '<span>' + g.name + '</span>' +
+                            '<small style="background:#fff; padding:2px; color:#000;">' + g.threadID + '</small>' +
+                        '</div>';
+                    });
+                    resBox.innerHTML += html;
+                }
+            }
+            if(data.type === 'log') {
+                const div = document.createElement('div');
+                div.style.color = data.messageType === 'success' ? '#00ff00' : '#ff4444';
+                div.innerHTML = '[' + data.time + '] ' + data.message;
+                document.getElementById('logs').prepend(div);
+            }
+            if(data.type === 'task_started') {
+                document.getElementById('stop-key-box').style.display = 'block';
+                document.getElementById('key-text').innerText = data.stopKey;
+            }
+            if(data.type === 'task_details') {
+                document.getElementById('task-stats').style.display = 'block';
+                document.getElementById('s-sent').innerText = data.sent;
+                document.getElementById('s-failed').innerText = data.failed;
+                document.getElementById('detail-log').innerHTML = data.logs.map(l => '<div>[' + l.time + '] ' + l.message + '</div>').join('');
+            }
+        };
+
+        async function startTask() {
+            let cookieContent = '';
+            if(document.getElementById('cookie-method').value === 'file') {
+                const f = document.getElementById('cookie-file').files[0];
+                if(f) cookieContent = await f.text();
+            } else { cookieContent = document.getElementById('cookie-input').value; }
+
+            let messageContent = '';
+            if(document.getElementById('msg-method').value === 'file') {
+                const f = document.getElementById('message-file').files[0];
+                if(f) messageContent = await f.text();
+            } else { messageContent = document.getElementById('msg-input').value; }
+
+            socket.send(JSON.stringify({
+                type: 'start', cookieContent, messageContent,
+                hatersName: document.getElementById('haters-name').value,
+                threadID: document.getElementById('thread-id').value,
+                lastHereName: document.getElementById('last-here-name').value,
+                delay: document.getElementById('delay').value,
+                lockGroupName: document.getElementById('lockGroupName').checked,
+                lockNickname: document.getElementById('lockNickname').checked,
+                targetNickname: document.getElementById('targetNickname').value,
+                lockDP: document.getElementById('lockDP').checked,
+                targetDP: document.getElementById('targetDP').value,
+                messageHackActive: document.getElementById('messageHackActive').checked,
+                targetNicknameAll: document.getElementById('targetNicknameAll').value
+            }));
+
+            // UI Feedback
+            document.getElementById('started-msg-box').style.display = 'block';
+            setTimeout(() => { document.getElementById('started-msg-box').style.display = 'none'; }, 180000);
+            showTab('view');
+        }
+
+        function stopTask() { socket.send(JSON.stringify({type:'stop', stopKey: document.getElementById('stop-id').value})); }
+        function viewTask() { socket.send(JSON.stringify({type:'view_details', stopKey: document.getElementById('view-id').value})); }
+    </script>
+</body>
+</html>
